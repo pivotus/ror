@@ -1,0 +1,8 @@
+development:
+  adapter: mysql2
+  encoding: utf8
+  database: vagrant
+  pool: 5
+  username: vagrant
+  password: vagrant
+  socket: /var/run/mysqld/mysqld.sock
