@@ -1,11 +1,16 @@
 # encoding: utf-8
 
+require FileUtils
+
 APP_ROOT = File.expand_path('../..', __FILE__)
 
 working_directory APP_ROOT
-worker_processes ENV['RAILS_ENV'] == 'development' ? 1 : 4
-stderr_path APP_ROOT + '/log/unicorn_stderr.log'
-stdout_path APP_ROOT + '/log/unicorn_stdout.log'
+worker_processes ENV['RAILS_ENV'] == 'production' ? 4 : 1
+
+FileUtils.mkdir_p APP_ROOT + '/log'
+stderr_path APP_ROOT + '/log/unicorn.stderr.log'
+stdout_path APP_ROOT + '/log/unicorn.stdout.log'
+
 user 'www-data', 'www-data'
 pid '/run/unicorn.pid'
 listen '/tmp/unicorn.sock', backlog: 64
@@ -31,6 +36,5 @@ after_fork do |server, worker|
   end
 
   ActiveRecord::Base.establish_connection if defined? ActiveRecord::Base
-
   Caching.redis.client.reconnect if defined? Caching.redis
 end
