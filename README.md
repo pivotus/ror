@@ -12,7 +12,7 @@ isterseniz:
 -   Uygulama ismini değiştir
 
     ```sh
-    $ find ./ -type f -readable -writable -exec sed -i "s/\bRor\b/Foo/g" {} \;
+    $ find . -not \( -name .git -prune \) -type f -readable -writable -exec sed -i "s/\bRor\b/Foo/g" {} \;
     ```
 
 -   Depoyu ilkle
