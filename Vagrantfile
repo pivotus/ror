@@ -1,7 +1,5 @@
 # vi: set ft=ruby : encoding: utf-8
 
-# synced_with_rsync = true
-
 Vagrant.configure(2) do |config|
   config.vm.box = 'pivotus/ror'
   config.vm.box_url = 'ror.box' if File.exists? 'ror.box'
@@ -9,20 +7,20 @@ Vagrant.configure(2) do |config|
   config.vm.network 'forwarded_port', guest: 80, host: 8080
   config.ssh.forward_agent = true
 
-  if defined? synced_with_rsync && synced_with_rsync
-    config.vm.synced_folder '.', '/vagrant',
-                            type: 'rsync',
-                            rsync__exclude: %w(
-                              .git/ *.box *.iso
-                            ),
-                            rsync__args: %w(
-                              --chmod=Dugo+w --verbose --archive --delete -z
-                            )
-  else
-    config.vm.synced_folder '.', '/vagrant',
-                            group: 'www-data',
-                            mount_options: %w(dmode=775 fmode=775)
-  end
+  # Use default sync method
+  config.vm.synced_folder '.', '/vagrant',
+                          group: 'www-data',
+                          mount_options: %w(dmode=775 fmode=775)
+
+  # Use rsynced shared folders
+  # config.vm.synced_folder '.', '/vagrant',
+  #                         type: 'rsync',
+  #                         rsync__exclude: %w(
+  #                           .git/ *.box *.iso
+  #                         ),
+  #                         rsync__args: %w(
+  #                           --chmod=Dugo+w --verbose --archive --delete -z
+  #                         )
 
   config.vm.provision 'shell', inline: '
     cd /vagrant && bundle install
