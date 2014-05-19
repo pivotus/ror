@@ -1,6 +1,6 @@
 # vi: set ft=ruby : encoding: utf-8
 
-ROOT, PORT = '/vagrant', 8080
+ROOT, PORT, ENVIRONMENT = '/vagrant', 8080, 'development'
 
 Vagrant.configure(2) do |config|
   config.vm.box = 'pivotus/ror'
@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
   # Use default shared folder method
   config.vm.synced_folder '.', ROOT,
                           group: 'www-data',
-                          mount_options: %w(dmode=775 fmode=775)
+                          mount_options: %w(dmode=775 fmode=664)
 
   # Use rsynced shared folders
   # config.vm.synced_folder '.', ROOT,
@@ -25,11 +25,11 @@ Vagrant.configure(2) do |config|
   #                         )
 
   config.vm.provision 'shell', inline: "
-    APP_ROOT='#{ROOT}' APP_PORT=#{PORT} ror-provision
+    ror-provision #{ROOT} #{PORT}
   "
 
   config.vm.provision 'shell', run: 'always', inline: "
-    APP_ROOT='#{ROOT}' APP_PORT=#{PORT} ror-boot
+    ror-boot #{ENVIRONMENT}
   "
 
   config.vm.post_up_message = '
