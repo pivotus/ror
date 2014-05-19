@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require FileUtils
+require 'fileutils'
 
 APP_ROOT = File.expand_path('../..', __FILE__)
 
