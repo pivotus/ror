@@ -23,11 +23,11 @@ Vagrant.configure(2) do |config|
   #                         )
 
   config.vm.provision 'shell', inline: '
-    cd /vagrant && bundle install
+    ror-provision
   '
 
   config.vm.provision 'shell', run: 'always', inline: '
-    echo vagrant | sudo -S service unicorn start
+    ror-boot
   '
 
   config.vm.post_up_message = '
